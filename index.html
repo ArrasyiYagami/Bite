@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#8A1C1C">
+<meta name="description" content="Bite — 100 resep Indonesia & Asia favorit, lengkap dengan bahan, langkah, dan tutorial YouTube. Tanpa login, tanpa internet wajib untuk datanya.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Bite — Mau menu apa hari ini?</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%238A1C1C'/%3E%3Cpath d='M18 30h28c0 10-6 16-14 16s-14-6-14-16z' fill='%23fff'/%3E%3Cpath d='M24 22v-6M32 22v-8M40 22v-6' stroke='%23fff' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --accent:#8A1C1C;
+  --accent-deep:#6E1414;
+  --accent-soft:rgba(138,28,28,.08);
+  --accent-soft-2:rgba(138,28,28,.14);
+  --bg:#F9F9F9;
+  --bg-warm:#FAF7F5;
+  --card:#FFFFFF;
+  --ink:#1C1917;
+  --ink-2:#6B6560;
+  --ink-3:#9C948D;
+  --line:rgba(28,25,23,.07);
+  --line-strong:rgba(28,25,23,.12);
+  --glass-bg:rgba(255,255,255,.55);
+  --glass-bg-hover:rgba(255,255,255,.68);
+  --glass-border:rgba(255,255,255,.45);
+  --glass-shadow:0 8px 32px rgba(138,28,28,.10), inset 0 1px 0 rgba(255,255,255,.65);
+  --glass-solid:rgba(255,255,255,.94);
+  --shadow-card:0 2px 10px rgba(28,25,23,.05), 0 12px 32px rgba(138,28,28,.06);
+  --shadow-card-hover:0 4px 14px rgba(28,25,23,.07), 0 18px 44px rgba(138,28,28,.12);
+  --r-nav:24px;
+  --r-card:18px;
+  --r-sheet:28px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --nav-h:64px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:15px;line-height:1.55;
+  min-height:100dvh;
+  overscroll-behavior-y:none;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(1100px 520px at 50% -8%, rgba(138,28,28,.05), transparent 70%);
+}
+img{display:block;max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+input{font:inherit;color:inherit}
+a{color:var(--accent);text-decoration:none}
+::selection{background:var(--accent-soft-2)}
+
+/* ============ LIQUID GLASS CORE ============ */
+.glass{
+  background:var(--glass-solid);
+  border:1px solid var(--glass-border);
+  box-shadow:var(--glass-shadow);
+  position:relative;
+}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .glass{
+    background:var(--glass-bg);
+    -webkit-backdrop-filter:blur(20px) saturate(180%);
+    backdrop-filter:blur(20px) saturate(180%);
+  }
+  .glass.glass-deep{
+    background:rgba(255,255,255,.62);
+    -webkit-backdrop-filter:blur(28px) saturate(190%);
+    backdrop-filter:blur(28px) saturate(190%);
+  }
+}
+/* specular highlight along the top edge */
+.glass::before{
+  content:"";position:absolute;left:10%;right:10%;top:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);
+  border-radius:999px;pointer-events:none;
+}
+
+/* ============ PRESS / HOVER MICRO-INTERACTIONS ============ */
+.pressable{transition:transform .18s var(--ease), background .18s var(--ease), box-shadow .18s var(--ease)}
+.pressable:active{transform:scale(.97)}
+.glass-tap:hover{background:var(--glass-bg-hover)}
+
+/* ============ SPLASH ============ */
+#splash{
+  position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  background:#8A1C1C;
+  background-image:radial-gradient(900px 460px at 50% -12%, rgba(255,255,255,.10), transparent 65%);
+  transition:opacity .5s var(--ease), visibility .5s;
+}
+#splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-inner{width:min(400px,88vw);display:flex;flex-direction:column;align-items:center;text-align:center}
+.splash-logo{
+  width:92px;height:92px;border-radius:28px;display:grid;place-items:center;margin-bottom:20px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);
+  box-shadow:0 10px 40px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.5);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  animation:splash-pop .7s var(--ease) both;
+}
+.splash-logo svg{width:52px;height:52px}
+.splash-title{color:#fff;font-size:36px;font-weight:800;letter-spacing:-.5px;animation:splash-pop .7s .08s var(--ease) both}
+.splash-sub{color:rgba(255,255,255,.82);font-size:14px;font-weight:500;margin:8px 0 30px;animation:splash-pop .7s .14s var(--ease) both}
+.splash-search{
+  width:100%;display:flex;align-items:center;gap:10px;height:56px;padding:0 18px;border-radius:20px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.38);
+  box-shadow:0 10px 34px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.45);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);backdrop-filter:blur(16px) saturate(160%);
+  animation:splash-pop .7s .2s var(--ease) both;transition:background .2s var(--ease);
+}
+.splash-search:focus-within{background:rgba(255,255,255,.24)}
+.splash-search svg{width:22px;height:22px;color:rgba(255,255,255,.85);flex-shrink:0}
+.splash-search input{
+  flex:1;background:none;border:0;outline:none;color:#fff;font-size:16px;font-weight:500;
+}
+.splash-search input::placeholder{color:rgba(255,255,255,.75)}
+.splash-hint{margin-top:16px;color:rgba(255,255,255,.55);font-size:12.5px;font-weight:500;animation:splash-pop .7s .28s var(--ease) both}
+@keyframes splash-pop{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+
+/* ============ TOP BAR (mobile) ============ */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 10px;
+  border-radius:0 0 22px 22px;
+  display:flex;align-items:center;gap:12px;
+}
+#topbar .tb-logo{width:38px;height:38px;border-radius:12px;background:var(--accent);display:grid;place-items:center;flex-shrink:0;box-shadow:0 4px 12px rgba(138,28,28,.35)}
+#topbar .tb-logo svg{width:22px;height:22px}
+.tb-greet{flex:1;min-width:0}
+.tb-greet h1{font-size:16.5px;font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-greet p{font-size:12px;color:var(--ink-2);font-weight:500}
+.tb-btn{
+  width:40px;height:40px;border-radius:14px;display:grid;place-items:center;flex-shrink:0;color:var(--ink);
+}
+.tb-btn svg{width:20px;height:20px}
+
+/* ============ LAYOUT ============ */
+#main{position:relative;z-index:1;padding:104px 16px calc(var(--nav-h) + var(--safe-b) + 28px);max-width:1200px;margin:0 auto}
+.view{animation:view-in .24s var(--ease) both}
+@keyframes view-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:26px 0 12px}
+.section-head h2{font-size:18px;font-weight:700;letter-spacing:-.3px}
+.section-head .see-all{font-size:13px;font-weight:600;color:var(--accent);display:flex;align-items:center;gap:2px}
+.section-head .see-all svg{width:15px;height:15px}
+.section-sub{font-size:13px;color:var(--ink-2);font-weight:500;margin:-4px 0 0}
+
+/* ============ HERO CARD ============ */
+.hero{
+  position:relative;border-radius:20px;overflow:hidden;aspect-ratio:16/10.5;
+  background:var(--bg-warm);border:1px solid var(--line);
+  box-shadow:var(--shadow-card);cursor:pointer;
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+.hero:active{transform:scale(.985)}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.hero:hover img{transform:scale(1.04)}
+.hero .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,10,8,0) 34%,rgba(20,10,8,.62) 100%)}
+.hero-body{position:absolute;left:0;right:0;bottom:0;padding:16px}
+.hero-chips{display:flex;gap:8px;margin-bottom:10px}
+.chip{
+  display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 12px;border-radius:999px;
+  font-size:11.5px;font-weight:600;letter-spacing:.1px;color:#fff;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.30);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.chip svg{width:13px;height:13px}
+.chip{white-space:nowrap}
+input[type=search]::-webkit-search-cancel-button,
+input[type=search]::-webkit-search-decoration{-webkit-appearance:none;appearance:none}
+.hero h3{color:#fff;font-size:22px;font-weight:800;letter-spacing:-.4px;text-shadow:0 1px 12px rgba(0,0,0,.3)}
+.hero p{color:rgba(255,255,255,.85);font-size:12.5px;font-weight:500;margin-top:3px}
+.hero-fav{position:absolute;top:12px;right:12px}
+
+/* ============ CATEGORY PILLS ============ */
+.pills{
+  display:flex;gap:8px;overflow-x:auto;padding:4px 16px 12px;margin:0 -16px;
+  scroll-snap-type:x proximity;scrollbar-width:none;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 24px),transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 24px),transparent);
+}
+.pills::-webkit-scrollbar{display:none}
+.pill{
+  flex-shrink:0;height:38px;padding:0 16px;border-radius:999px;
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;font-weight:600;color:var(--ink);
+  scroll-snap-align:start;white-space:nowrap;
+}
+.pill.active{background:var(--accent);color:#fff;border-color:rgba(138,28,28,.3);box-shadow:0 6px 18px rgba(138,28,28,.35)}
+.pill.active::before{display:none}
+.pill .count{font-size:11px;font-weight:700;opacity:.65}
+
+/* ============ CARDS GRID ============ */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.hscroll{display:flex;gap:14px;overflow-x:auto;padding:2px 16px 6px;margin:0 -16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.hscroll::-webkit-scrollbar{display:none}
+.hscroll .card{width:74vw;max-width:280px;flex-shrink:0;scroll-snap-align:start}
+.card{
+  position:relative;background:var(--card);border-radius:var(--r-card);overflow:hidden;
+  border:1px solid var(--line);box-shadow:var(--shadow-card);cursor:pointer;
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease);
+}
+@media (hover:hover){
+  .card:hover{transform:translateY(-3px);box-shadow:var(--shadow-card-hover)}
+  .card:hover .card-img img{transform:scale(1.06)}
+}
+.card:active{transform:scale(.97)}
+.card-img{position:relative;aspect-ratio:16/10;overflow:hidden;background:linear-gradient(135deg,#EFE7E3,#E4D6D2)}
+.card-img img{width:100%;height:100%;object-fit:cover;transition:transform .45s var(--ease)}
+.card-img .img-shimmer{position:absolute;inset:0;transition:opacity .35s var(--ease)}
+.card-cat{
+  position:absolute;left:10px;top:10px;padding:4px 10px;border-radius:999px;
+  font-size:10.5px;font-weight:700;letter-spacing:.2px;color:#fff;
+  background:rgba(28,25,23,.42);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.card-fav{
+  position:absolute;right:8px;top:8px;width:34px;height:34px;border-radius:999px;display:grid;place-items:center;
+  color:#fff;background:rgba(28,25,23,.38);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.card-fav svg{width:17px;height:17px}
+.card-fav.on{background:rgba(138,28,28,.88);box-shadow:0 4px 14px rgba(138,28,28,.4)}
+.card-fav.on svg{fill:currentColor}
+.card-body{padding:11px 12px 13px}
+.card-body h4{font-size:14px;font-weight:700;letter-spacing:-.2px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:38px}
+.card-meta{display:flex;align-items:center;gap:10px;margin-top:7px;color:var(--ink-2);font-size:11.5px;font-weight:600}
+.card-meta span{display:inline-flex;align-items:center;gap:4px}
+.card-meta svg{width:13px;height:13px;color:var(--ink-3)}
+.card-area{margin-top:5px;font-size:11px;font-weight:600;color:var(--ink-3);display:flex;align-items:center;gap:4px}
+.card-area svg{width:12px;height:12px}
+
+/* ============ SKELETON ============ */
+.skel{position:relative;overflow:hidden;background:rgba(255,255,255,.6);border:1px solid var(--glass-border);border-radius:var(--r-card)}
+.skel::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.85) 50%,transparent 70%);
+  transform:translateX(-100%);animation:shimmer 1.4s infinite;
+}
+@keyframes shimmer{to{transform:translateX(100%)}}
+.skel-card .sk-img{aspect-ratio:16/10;border-radius:14px;margin:8px 8px 0}
+.skel-card .sk-line{height:12px;border-radius:6px;margin:12px 12px 0;background:rgba(28,25,23,.07)}
+.skel-card .sk-line.s2{width:55%;margin-bottom:14px;height:10px}
+.skel-hero{aspect-ratio:16/10.5;border-radius:20px;margin-bottom:4px}
+
+/* ============ SEARCH ============ */
+.search-bar{
+  display:flex;align-items:center;gap:10px;height:54px;padding:0 8px 0 16px;border-radius:18px;
+  position:sticky;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:30;
+}
+.search-bar svg{width:20px;height:20px;color:var(--ink-2);flex-shrink:0}
+.search-bar input{flex:1;min-width:0;background:none;border:0;outline:none;font-size:15px;font-weight:500}
+.search-bar input::placeholder{color:var(--ink-3)}
+.search-clear{
+  width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:var(--ink-2);
+  transition:opacity .15s;
+}
+.search-clear svg{width:16px;height:16px}
+.search-clear.hidden{opacity:0;pointer-events:none}
+.recent-wrap{margin-top:20px}
+.recent-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.recent-head h3{font-size:14px;font-weight:700;display:flex;align-items:center;gap:7px}
+.recent-head h3 svg{width:15px;height:15px;color:var(--ink-2)}
+.recent-head button{font-size:12px;font-weight:600;color:var(--ink-2);padding:6px 10px;border-radius:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip-recent{
+  display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:999px;
+  font-size:13px;font-weight:600;color:var(--ink);
+}
+.chip-recent svg{width:13px;height:13px;color:var(--ink-3)}
+.result-count{font-size:12.5px;color:var(--ink-2);font-weight:600;margin:18px 2px 12px}
+.result-count b{color:var(--ink)}
+
+/* ============ EMPTY STATES ============ */
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;padding:56px 24px}
+.empty-ico{
+  width:76px;height:76px;border-radius:24px;display:grid;place-items:center;margin-bottom:16px;
+  background:var(--bg-warm);border:1px solid var(--line);color:var(--ink-3);
+}
+.empty-ico svg{width:34px;height:34px}
+.empty h3{font-size:16.5px;font-weight:700}
+.empty p{font-size:13.5px;color:var(--ink-2);margin-top:6px;max-width:280px}
+.empty .btn{margin-top:20px}
+
+/* ============ BUTTONS ============ */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:50px;padding:0 24px;border-radius:16px;
+  background:var(--accent);color:#fff;font-size:14.5px;font-weight:700;letter-spacing:.1px;
+  box-shadow:0 8px 22px rgba(138,28,28,.35), inset 0 1px 0 rgba(255,255,255,.22);
+  transition:transform .18s var(--ease), box-shadow .18s var(--ease), background .18s;
+}
+.btn:hover{background:var(--accent-deep);box-shadow:0 10px 26px rgba(138,28,28,.42)}
+.btn:active{transform:scale(.97)}
+.btn svg{width:18px;height:18px}
+.btn.block{width:100%}
+.btn-ghost{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:50px;padding:0 22px;border-radius:16px;font-size:14px;font-weight:700;color:var(--accent);
+  background:var(--accent-soft);border:1px solid rgba(138,28,28,.16);
+  transition:transform .18s var(--ease), background .18s;
+}
+.btn-ghost:hover{background:rgba(138,28,28,.13)}
+.btn-ghost:active{transform:scale(.97)}
+.btn-ghost svg{width:18px;height:18px}
+.btn-danger{color:#B42318;background:rgba(180,35,24,.08);border-color:rgba(180,35,24,.18)}
+.btn-danger:hover{background:rgba(180,35,24,.13)}
+
+/* ============ NAV ============ */
+#nav{
+  position:fixed;left:50%;bottom:calc(var(--safe-b) + 14px);transform:translateX(-50%);z-index:50;
+  width:min(420px,calc(100vw - 32px));height:var(--nav-h);border-radius:var(--r-nav);
+  display:flex;align-items:stretch;padding:6px;gap:4px;
+}
+.nav-item{
+  flex:1;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  color:var(--ink-2);font-size:10.5px;font-weight:700;letter-spacing:.1px;
+  transition:color .18s, background .18s, transform .18s var(--ease);
+}
+.nav-item svg{width:21px;height:21px;transition:transform .18s var(--ease)}
+.nav-item.active{color:var(--accent);background:var(--accent-soft)}
+.nav-item.active svg{transform:translateY(-1px) scale(1.06)}
+.nav-item:active{transform:scale(.94)}
+
+/* ============ DETAIL SHEET ============ */
+#sheet-root{position:fixed;inset:0;z-index:60;display:none}
+#sheet-root.open{display:block}
+.sheet-backdrop{
+  position:absolute;inset:0;background:rgba(24,12,10,.38);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  opacity:0;transition:opacity .26s var(--ease);
+}
+#sheet-root.show .sheet-backdrop{opacity:1}
+.sheet-panel{
+  position:absolute;left:0;right:0;bottom:0;max-height:calc(100dvh - 24px);
+  border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  display:flex;flex-direction:column;overflow:hidden;
+  transform:translateY(103%);transition:transform .3s var(--ease);
+}
+#sheet-root.show .sheet-panel{transform:translateY(0)}
+.sheet-grab{width:44px;height:5px;border-radius:999px;background:rgba(28,25,23,.18);margin:10px auto 2px;flex-shrink:0}
+.sheet-scroll{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+.sheet-hero{position:relative;aspect-ratio:16/9.5;background:var(--bg-warm)}
+.sheet-hero img{width:100%;height:100%;object-fit:cover}
+.sheet-hero .scrim{position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,10,8,.18),transparent 42%,rgba(20,10,8,.5) 92%)}
+.sheet-fabs{position:absolute;top:14px;right:14px;display:flex;gap:10px}
+.fab{
+  width:42px;height:42px;border-radius:999px;display:grid;place-items:center;color:var(--ink);
+}
+.fab svg{width:19px;height:19px}
+.fab.on{color:var(--accent);background:rgba(255,255,255,.85)}
+.fab.on svg{fill:currentColor}
+.sheet-head{padding:18px 20px 6px}
+.sheet-cat{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--accent);background:var(--accent-soft);padding:5px 12px;border-radius:999px;margin-bottom:10px}
+.sheet-head h2{font-size:23px;font-weight:800;letter-spacing:-.4px;line-height:1.2}
+.sheet-desc{font-size:14px;color:var(--ink-2);margin-top:8px}
+.meta-row{display:flex;gap:8px;margin:16px 0 4px}
+.meta-box{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:11px 6px;border-radius:14px;
+  background:var(--bg-warm);border:1px solid var(--line);
+}
+.meta-box svg{width:17px;height:17px;color:var(--accent)}
+.meta-box b{font-size:13px;font-weight:700}
+.meta-box span{font-size:10.5px;font-weight:600;color:var(--ink-2)}
+.sheet-section{padding:8px 20px 0}
+.sheet-section h3{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;letter-spacing:-.2px;margin:18px 0 12px}
+.sheet-section h3 svg{width:17px;height:17px;color:var(--accent)}
+.ing-list{display:flex;flex-direction:column;gap:2px}
+.ing-item{
+  display:flex;align-items:center;gap:12px;padding:10px 4px;border-radius:12px;cursor:pointer;
+  transition:background .15s;user-select:none;-webkit-user-select:none;
+}
+.ing-item:hover{background:var(--bg-warm)}
+.ing-check{
+  width:24px;height:24px;border-radius:999px;border:2px solid var(--line-strong);flex-shrink:0;
+  display:grid;place-items:center;color:#fff;transition:all .18s var(--ease);
+}
+.ing-check svg{width:13px;height:13px;opacity:0;transform:scale(.5);transition:all .18s var(--ease)}
+.ing-item.done .ing-check{background:var(--accent);border-color:var(--accent)}
+.ing-item.done .ing-check svg{opacity:1;transform:scale(1)}
+.ing-item span{font-size:14px;font-weight:500;transition:color .15s}
+.ing-item.done span{color:var(--ink-3);text-decoration:line-through}
+.ing-progress{font-size:12px;font-weight:600;color:var(--ink-2);margin-top:10px}
+.steps{display:flex;flex-direction:column;gap:0;counter-reset:step}
+.step{display:flex;gap:14px;padding:12px 0}
+.step + .step{border-top:1px dashed var(--line)}
+.step-num{
+  counter-increment:step;width:30px;height:30px;border-radius:999px;flex-shrink:0;
+  background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;
+  font-size:13px;font-weight:800;
+}
+.step-num::before{content:counter(step)}
+.step p{font-size:14px;color:var(--ink);padding-top:4px}
+.video-card{
+  position:relative;border-radius:18px;overflow:hidden;aspect-ratio:16/9;cursor:pointer;
+  background:#000;border:1px solid var(--line);
+}
+.video-card img{width:100%;height:100%;object-fit:cover;opacity:.85;transition:opacity .3s, transform .4s var(--ease)}
+.video-card:hover img{opacity:1;transform:scale(1.03)}
+.video-card iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-play{
+  position:absolute;inset:0;display:grid;place-items:center;
+  background:linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.34));
+}
+.video-play .vp{
+  width:64px;height:64px;border-radius:999px;display:grid;place-items:center;color:var(--accent);
+  background:rgba(255,255,255,.92);box-shadow:0 10px 30px rgba(0,0,0,.35);
+  transition:transform .18s var(--ease);
+}
+.video-play .vp svg{width:26px;height:26px;margin-left:3px}
+.video-card:hover .vp{transform:scale(1.07)}
+.video-card:active .vp{transform:scale(.95)}
+.source-line{
+  display:flex;align-items:center;gap:8px;margin:18px 0 6px;padding:12px 14px;border-radius:14px;
+  font-size:12.5px;color:var(--ink-2);font-weight:500;background:var(--bg-warm);border:1px solid var(--line);
+}
+.source-line svg{width:15px;height:15px;color:var(--ink-3);flex-shrink:0}
+.source-line a{font-weight:700;color:var(--accent);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sheet-actions{padding:20px; padding-bottom:calc(20px + var(--safe-b))}
+.sheet-actions .btn{width:100%}
+
+/* ============ PROFILE ============ */
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.stat-box{
+  border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:2px;
+}
+.stat-box b{font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--accent)}
+.stat-box span{font-size:12px;font-weight:600;color:var(--ink-2)}
+.stat-box.wide{grid-column:1/-1;flex-direction:row;align-items:center;justify-content:space-between}
+.stat-box .sb-ico{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.stat-box .sb-ico svg{width:20px;height:20px}
+.about-card{border-radius:20px;padding:20px;margin-top:14px}
+.about-card h3{font-size:15px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.about-card h3 svg{width:17px;height:17px;color:var(--accent)}
+.about-card p{font-size:13.5px;color:var(--ink-2)}
+.about-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--line);font-size:13.5px;font-weight:600}
+.about-row:first-of-type{border-top:0}
+.about-row span{color:var(--ink-2);font-weight:500}
+.about-actions{margin-top:14px}
+.profile-foot{text-align:center;color:var(--ink-3);font-size:12px;font-weight:500;padding:26px 0 6px}
+.profile-foot b{color:var(--accent)}
+
+/* ============ TOAST / CONFIRM ============ */
+#toast{
+  position:fixed;left:50%;bottom:calc(var(--safe-b) + var(--nav-h) + 22px);transform:translateX(-50%) translateY(16px);
+  z-index:80;padding:12px 20px;border-radius:999px;display:flex;align-items:center;gap:8px;
+  background:rgba(28,25,23,.88);color:#fff;font-size:13px;font-weight:600;
+  box-shadow:0 12px 34px rgba(0,0,0,.28);
+  opacity:0;visibility:hidden;transition:all .28s var(--ease);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+#toast.show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+#toast svg{width:16px;height:16px;color:#7BC47F}
+#confirm{position:fixed;inset:0;z-index:70;display:none;align-items:flex-end;justify-content:center}
+#confirm.open{display:flex}
+.confirm-backdrop{position:absolute;inset:0;background:rgba(24,12,10,.38);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+.confirm-card{
+  position:relative;width:min(400px,calc(100vw - 32px));margin-bottom:calc(var(--safe-b) + 20px);
+  border-radius:22px;padding:22px;
+  transform:translateY(24px);opacity:0;transition:all .26s var(--ease);
+}
+#confirm.show .confirm-card{transform:none;opacity:1}
+.confirm-card h3{font-size:16px;font-weight:800}
+.confirm-card p{font-size:13.5px;color:var(--ink-2);margin-top:6px}
+.confirm-btns{display:flex;gap:10px;margin-top:18px}
+.confirm-btns .btn-ghost,.confirm-btns .btn{flex:1;height:46px;font-size:13.5px}
+
+/* ============ DESKTOP ============ */
+@media (min-width:1024px){
+  #topbar{display:none}
+  #main{padding:36px 32px calc(var(--nav-h) + 36px)}
+  .grid{grid-template-columns:repeat(4,1fr);gap:20px}
+  .hscroll{margin:0;padding:2px 0 6px}
+  .hscroll .card{width:230px}
+  .pills{margin:0;padding:4px 0 12px;flex-wrap:wrap;overflow:visible;-webkit-mask-image:none;mask-image:none}
+  #nav{
+    left:20px;top:50%;bottom:auto;transform:translateY(-50%);
+    width:72px;height:auto;flex-direction:column;padding:10px 8px;border-radius:26px;gap:6px;
+  }
+  #nav::before{left:30%;right:30%;top:10px;bottom:10%;height:auto;width:1px;background:linear-gradient(180deg,transparent,rgba(255,255,255,.9),transparent)}
+  .nav-item{flex:none;padding:10px 0;border-radius:16px;font-size:9.5px}
+  .nav-brand{display:none!important}
+  .hero{aspect-ratio:21/8.5}
+  .hero h3{font-size:28px}
+  .hero-body{padding:24px}
+  .sheet-panel{
+    left:50%;right:auto;bottom:auto;top:50%;transform:translate(-50%,-46%) scale(.97);
+    width:min(760px,92vw);max-height:88vh;border-radius:24px;
+  }
+  #sheet-root.show .sheet-panel{transform:translate(-50%,-50%) scale(1)}
+  .sheet-grab{display:none}
+  .sheet-head{padding:24px 28px 6px}
+  .sheet-section{padding:8px 28px 0}
+  .sheet-actions{padding:22px 28px}
+  #confirm{align-items:center}
+  .confirm-card{margin-bottom:0}
+  .search-bar{top:10px}
+}
+@media (min-width:1500px){
+  #nav{left:calc(50vw - 640px)}
+}
+/* ============ MISC ============ */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px;border-radius:6px}
+.hscroll .card .card-body h4{font-size:13.5px}
+</style>
+</head>
+<body>
+
+<!-- ===== SPLASH ===== -->
+<div id="splash" role="dialog" aria-label="Selamat datang">
+  <div class="splash-inner">
+    <div class="splash-logo">
+      <svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="30" fill="#fff" fill-opacity=".12"/><path d="M18 31h28c0 10-6 16-14 16s-14-6-14-16z" fill="#fff"/><path d="M24 23v-6M32 23v-8M40 23v-6" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></svg>
+    </div>
+    <div class="splash-title">Bite</div>
+    <div class="splash-sub">Resep Indonesia &amp; Asia, langsung dari dapurmu</div>
+    <form class="splash-search" id="splash-form">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="splash-input" type="search" placeholder="Mau menu apa hari ini?" autocomplete="off" enterkeyhint="search" aria-label="Cari resep">
+    </form>
+    <div class="splash-hint">100 resep pilihan — ketuk di mana saja untuk mulai</div>
+  </div>
+</div>
+
+<!-- ===== TOP BAR ===== -->
+<header id="topbar" class="glass" hidden>
+  <div class="tb-logo"><svg viewBox="0 0 64 64" fill="none"><path d="M18 31h28c0 10-6 16-14 16s-14-6-14-16z" fill="#fff"/><path d="M24 23v-6M32 23v-8M40 23v-6" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/></svg></div>
+  <div class="tb-greet"><h1 id="tb-title">Bite</h1><p id="tb-sub">Mau menu apa hari ini?</p></div>
+  <button class="tb-btn glass glass-tap pressable" data-nav="search" aria-label="Cari"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main id="main"></main>
+
+<!-- ===== NAV ===== -->
+<nav id="nav" class="glass" aria-label="Navigasi utama">
+  <button class="nav-item pressable" data-nav="home" aria-label="Beranda"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h5v-6h4v6h5V9.5"/></svg><span>Home</span></button>
+  <button class="nav-item pressable" data-nav="search" aria-label="Cari"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Cari</span></button>
+  <button class="nav-item pressable" data-nav="favorites" aria-label="Favorit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20.3 4.7 13a4.6 4.6 0 0 1 6.5-6.5l.8.8.8-.8a4.6 4.6 0 0 1 6.5 6.5Z"/></svg><span>Favorit</span></button>
+  <button class="nav-item pressable" data-nav="profile" aria-label="Profil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.6-3.2 4.4-5 7.5-5s5.9 1.8 7.5 5"/></svg><span>Profil</span></button>
+</nav>
+
+<!-- ===== DETAIL SHEET ===== -->
+<div id="sheet-root">
+  <div class="sheet-backdrop" id="sheet-backdrop"></div>
+  <div class="sheet-panel glass glass-deep" role="dialog" aria-modal="true">
+    <div class="sheet-grab"></div>
+    <div class="sheet-scroll" id="sheet-scroll"></div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM ===== -->
+<div id="confirm">
+  <div class="confirm-backdrop" id="confirm-backdrop"></div>
+  <div class="confirm-card glass glass-deep">
+    <h3 id="confirm-title">Yakin?</h3>
+    <p id="confirm-text"></p>
+    <div class="confirm-btns">
+      <button class="btn-ghost pressable" id="confirm-no">Batal</button>
+      <button class="btn pressable" id="confirm-yes">Ya</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" role="status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 12.5 5 5 10-11"/></svg><span id="toast-msg">OK</span></div>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+/* ================= HELPERS ================= */
+const $  = (s, c) => (c || document).querySelector(s);
+const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const thumb = (id, big) => `https://i.ytimg.com/vi/${id}/${big ? 'hqdefault' : 'mqdefault'}.jpg`;
+const FALLBACK_IMG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 200'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23EFE7E3'/%3E%3Cstop offset='1' stop-color='%23E0CFC9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='320' height='200' fill='url(%23g)'/%3E%3Ccircle cx='160' cy='100' r='46' fill='%23fff' fill-opacity='.5'/%3E%3Cpath d='M136 100h48c0 17-10 26-24 26s-24-9-24-26z' fill='%238A1C1C' fill-opacity='.55'/%3E%3C/svg%3E";
+const ICO = {
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>',
+  pot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11h16v3a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6Z"/><path d="M2 11h20M9 7.5c0-1.5 1-1.5 1-3M14 7.5c0-1.5 1-1.5 1-3"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10.2-6.5a1 1 0 0 0 0-1.7L9.53 4.65A1 1 0 0 0 8 5.5Z"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20.3 4.7 13a4.6 4.6 0 0 1 6.5-6.5l.8.8.8-.8a4.6 4.6 0 0 1 6.5 6.5Z"/></svg>',
+  yt:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2a2.5 2.5 0 0 0-1.76-1.77C18.25 5 12 5 12 5s-6.25 0-7.84.43A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.76 1.77C5.75 19 12 19 12 19s6.25 0 7.84-.43a2.5 2.5 0 0 0 1.76-1.77A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15.2V8.8l5.5 3.2Z"/></svg>',
+  fire:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s5 4.5 5 9.5a5 5 0 0 1-10 0c0-1.6.6-3 1.4-4.2C9 10.5 10 11.5 10 11.5S10.5 6 12 3Z"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="4.5" cy="12" r="1.3" fill="currentColor" stroke="none"/><circle cx="4.5" cy="18" r="1.3" fill="currentColor" stroke="none"/></svg>',
+  steps:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h9M4 12h13M4 18h9"/><path d="m17.5 4.5 2 2-2 2M17.5 16.5l2 2-2 2"/></svg>',
+  trash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M10 4h4M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>',
+  chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg>',
+  history:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 12a8 8 0 1 1 2.3 5.6M4 12H2.5M4 12l2-2"/><path d="M12 8v4l2.6 2"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  heartBig:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 20.3 4.7 13a4.6 4.6 0 0 1 6.5-6.5l.8.8.8-.8a4.6 4.6 0 0 1 6.5 6.5Z"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21Z"/><path d="M20 18.5H6.5A2.5 2.5 0 0 0 4 21"/></svg>',
+  spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 13.8 9l5.7 1.8-5.7 1.8L12 18.2l-1.8-5.6L4.5 10.8 10.2 9Z"/><path d="M19 3v4M21 5h-4"/></svg>',
+  info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 7.8v.2"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7"/></svg>'
+};
+
+/* ================= STATE ================= */
+const APP_RECIPES = (typeof RECIPES !== 'undefined' && Array.isArray(RECIPES)) ? RECIPES : [];
+const BY_ID = Object.fromEntries(APP_RECIPES.map(r => [r.id, r]));
+const LS_FAV = 'bite.favs.v1', LS_RECENT = 'bite.recent.v1', LS_SPLASH = 'bite.splash.v1';
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch (e) { return d; } };
+let favs = new Set(load(LS_FAV, []));
+let recents = load(LS_RECENT, []);
+let state = { view:'home', cat:'all', query:'', prevRoute:'#/home' };
+const CATS = [
+  {id:'all',label:'Semua'},{id:'indonesian',label:'Indonesian'},{id:'chicken',label:'Ayam'},
+  {id:'beef',label:'Daging'},{id:'seafood',label:'Laut'},{id:'soup',label:'Sup'},
+  {id:'noodles',label:'Mie'},{id:'rice',label:'Nasi'},{id:'veggie',label:'Sayur'},
+  {id:'dessert',label:'Dessert'},{id:'snack',label:'Snack'}
+];
+const TYPE_OF = { chicken:['Ayam','Unggas'], beef:['Daging'], seafood:['Laut'], soup:['Sup'], noodles:['Mie'], rice:['Nasi'], veggie:['Sayur'], dessert:['Dessert'], snack:['Snack'] };
+function catFilter(list, cat){
+  if (cat === 'all') return list;
+  if (cat === 'indonesian') return list.filter(r => r.category === 'Indonesian');
+  const types = TYPE_OF[cat]; return types ? list.filter(r => types.includes(r.type)) : list;
+}
+const saveFavs = () => localStorage.setItem(LS_FAV, JSON.stringify([...favs]));
+const saveRecents = () => localStorage.setItem(LS_RECENT, JSON.stringify(recents.slice(0, 8)));
+function commitRecent(q){
+  q = q.trim(); if (q.length < 2) return;
+  recents = [q, ...recents.filter(x => x.toLowerCase() !== q.toLowerCase())].slice(0, 8);
+  saveRecents();
+}
+
+/* ================= TOAST / CONFIRM ================= */
+let toastT;
+function toast(msg){
+  $('#toast-msg').textContent = msg;
+  const t = $('#toast'); t.classList.add('show');
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2200);
+}
+let confirmResolve;
+function confirmDialog(title, text, okLabel){
+  $('#confirm-title').textContent = title;
+  $('#confirm-text').textContent = text;
+  $('#confirm-yes').textContent = okLabel || 'Ya, hapus';
+  $('#confirm').classList.add('open');
+  requestAnimationFrame(() => $('#confirm').classList.add('show'));
+  return new Promise(res => { confirmResolve = res; });
+}
+function closeConfirm(v){
+  if (!$('#confirm').classList.contains('open')) return;
+  $('#confirm').classList.remove('show');
+  setTimeout(() => $('#confirm').classList.remove('open'), 240);
+  if (confirmResolve) { confirmResolve(v); confirmResolve = null; }
+}
+$('#confirm-no').onclick = () => closeConfirm(false);
+$('#confirm-yes').onclick = () => closeConfirm(true);
+$('#confirm-backdrop').onclick = () => closeConfirm(false);
+
+/* ================= FAVORITES ================= */
+function toggleFav(id, el){
+  if (favs.has(id)) { favs.delete(id); toast('Dihapus dari Favorit'); }
+  else { favs.add(id); toast('Ditambahkan ke Favorit'); }
+  saveFavs();
+  $$(`[data-fav="${id}"]`).forEach(b => b.classList.toggle('on', favs.has(id)));
+  if (state.view === 'favorites') renderFavorites();
+  if (state.view === 'profile') renderProfile();
+}
+
+/* ================= CARD TEMPLATES ================= */
+function imgAttrs(r, big){
+  return `src="${thumb(r.youtubeId, big)}" alt="${esc(r.title)}" loading="lazy" data-fb="1"`;
+}
+function cardHTML(r, opts){
+  const fav = favs.has(r.id) ? ' on' : '';
+  return `
+  <article class="card pressable" data-open="${r.id}" tabindex="0" role="button" aria-label="${esc(r.title)}">
+    <div class="card-img">
+      <img ${imgAttrs(r)}>
+      <div class="img-shimmer skel"></div>
+      <span class="card-cat">${esc(r.category)}</span>
+      <button class="card-fav pressable${fav}" data-fav="${r.id}" aria-label="Favorit ${esc(r.title)}">${ICO.heart}</button>
+    </div>
+    <div class="card-body">
+      <h4>${esc(r.title)}</h4>
+      <div class="card-meta"><span>${ICO.clock}${esc(r.prepTime)}</span><span>${ICO.pot}${r.servings} porsi</span></div>
+      <div class="card-area">${ICO.pin}${esc(r.area)}</div>
+    </div>
+  </article>`;
+}
+function skeletonCards(n){
+  return Array.from({length:n}, () => `
+  <div class="skel skel-card" aria-hidden="true">
+    <div class="sk-img"></div><div class="sk-line"></div><div class="sk-line s2"></div>
+  </div>`).join('');
+}
+function heroHTML(r){
+  return `
+  <section class="hero pressable" data-open="${r.id}" role="button" tabindex="0" aria-label="Resep unggulan ${esc(r.title)}">
+    <img ${imgAttrs(r, true)}>
+    <div class="img-shimmer skel"></div>
+    <div class="scrim"></div>
+    <button class="card-fav pressable${favs.has(r.id) ? ' on' : ''}" data-fav="${r.id}" aria-label="Favorit ${esc(r.title)}" style="position:absolute">${ICO.heart}</button>
+    <div class="hero-body">
+      <div class="hero-chips">
+        <span class="chip">${ICO.spark}Resep Unggulan</span>
+        <span class="chip">${ICO.clock}${esc(r.prepTime)}</span>
+        <span class="chip">${ICO.fire}${esc(r.cookTime)}</span>
+      </div>
+      <h3>${esc(r.title)}</h3>
+      <p>${esc(r.area)} &middot; ${r.servings} porsi</p>
+    </div>
+  </section>`;
+}
+function pillsHTML(){
+  return CATS.map(c => {
+    const n = c.id === 'all' ? APP_RECIPES.length : catFilter(APP_RECIPES, c.id).length;
+    return `<button class="pill glass glass-tap pressable${state.cat === c.id ? ' active' : ''}" data-cat="${c.id}">${c.label} <span class="count">${n}</span></button>`;
+  }).join('');
+}
+
+/* ================= IMAGES: shimmer + fallback ================= */
+function hydrateImages(root){
+  $$('img[data-fb]', root).forEach(img => {
+    const shim = img.parentElement && img.parentElement.querySelector('.img-shimmer');
+    const done = () => { if (shim) shim.style.opacity = '0'; };
+    img.addEventListener('load', done, { once:true });
+    img.addEventListener('error', () => {
+      img.src = FALLBACK_IMG;
+      img.removeAttribute('data-fb');
+      if (shim) shim.style.opacity = '0';
+    }, { once:true });
+    if (img.complete && img.naturalWidth > 0) done();
+  });
+}
+
+/* ================= VIEWS ================= */
+const FEATURED = (() => {
+  const day = Math.floor(Date.now() / 864e5);
+  const pick = ['rendang-daging','soto-betawi','nasi-goreng','ayam-geprek','bakso','pad-thai','spaghetti-carbonara','martabak-manis','gudeg','rawon'];
+  return { hero: BY_ID[APP_RECIPES[Math.floor(day / 3) % APP_RECIPES.length].id], popular: pick.map(id => BY_ID[id]).filter(Boolean) };
+})();
+
+function greeting(){
+  const h = new Date().getHours();
+  return h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 19 ? 'Selamat sore' : 'Selamat malam';
+}
+
+function renderHome(){
+  const list = catFilter(APP_RECIPES, state.cat);
+  $('#main').innerHTML = `
+  <div class="view">
+    ${heroHTML(FEATURED.hero)}
+    <div class="section-head" style="margin-top:22px"><h2>Jelajahi Kategori</h2></div>
+    <div class="pills" role="tablist">${pillsHTML()}</div>
+    <div class="section-head"><h2>Paling Dicari</h2></div>
+    <div class="hscroll">${FEATURED.popular.map(r => cardHTML(r)).join('')}</div>
+    <div class="section-head"><h2>${state.cat === 'all' ? 'Semua Resep' : 'Kategori: ' + (CATS.find(c => c.id === state.cat) || {}).label}</h2><span class="section-sub">${list.length} resep</span></div>
+    <div class="grid" id="home-grid">${skeletonCards(8)}</div>
+  </div>`;
+  hydrateImages($('#main'));
+  setTimeout(() => {
+    const g = $('#home-grid'); if (!g) return;
+    g.innerHTML = list.map(r => cardHTML(r)).join('');
+    hydrateImages(g);
+  }, 420);
+}
+
+function renderSearch(){
+  $('#main').innerHTML = `
+  <div class="view">
+    <div class="search-bar glass glass-deep">
+      ${ICO.search}
+      <input id="search-input" type="search" placeholder="Cari resep, bahan, atau daerah..." autocomplete="off" aria-label="Cari resep" value="${esc(state.query)}">
+      <button class="search-clear pressable hidden" id="search-clear" aria-label="Bersihkan">${ICO.close}</button>
+    </div>
+    <div id="recent-box"></div>
+    <div id="search-results"></div>
+  </div>`;
+  renderRecents();
+  const input = $('#search-input');
+  input.addEventListener('input', () => { state.query = input.value; $('#search-clear').classList.toggle('hidden', !input.value); renderResults(); });
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') { commitRecent(input.value); renderRecents(); input.blur(); } });
+  $('#search-clear').onclick = () => { state.query = ''; input.value = ''; $('#search-clear').classList.add('hidden'); renderRecents(); renderResults(); input.focus(); };
+  renderResults();
+  if (!state.query) setTimeout(() => input.focus(), 120);
+}
+
+function renderRecents(){
+  const box = $('#recent-box'); if (!box) return;
+  if (!recents.length || state.query) { box.innerHTML = ''; return; }
+  box.innerHTML = `
+  <div class="recent-wrap">
+    <div class="recent-head"><h3>${ICO.history}Pencarian Terakhir</h3><button id="recent-clear" class="pressable">Bersihkan</button></div>
+    <div class="chips">${recents.map(q => `<button class="chip-recent glass glass-tap pressable" data-recent="${esc(q)}">${ICO.history}${esc(q)}</button>`).join('')}</div>
+  </div>`;
+  $('#recent-clear').onclick = () => { recents = []; saveRecents(); renderRecents(); toast('Riwayat pencarian dihapus'); };
+  $$('#recent-box [data-recent]').forEach(b => b.onclick = () => {
+    state.query = b.dataset.recent; $('#search-input').value = state.query;
+    $('#search-clear').classList.remove('hidden'); renderRecents(); renderResults();
+  });
+}
+
+function searchFilter(q){
+  const k = q.trim().toLowerCase();
+  if (!k) return APP_RECIPES;
+  return APP_RECIPES.filter(r =>
+    r.title.toLowerCase().includes(k) || r.description.toLowerCase().includes(k) ||
+    r.area.toLowerCase().includes(k) || r.category.toLowerCase().includes(k) ||
+    r.ingredients.some(i => i.toLowerCase().includes(k)));
+}
+
+function renderResults(){
+  const box = $('#search-results'); if (!box) return;
+  const q = state.query.trim();
+  if (!q) { box.innerHTML = ''; return; }
+  const list = searchFilter(q);
+  if (!list.length) {
+    box.innerHTML = `
+    <div class="empty">
+      <div class="empty-ico">${ICO.search}</div>
+      <h3>Tidak ada hasil untuk "${esc(q)}"</h3>
+      <p>Coba kata kunci lain, misalnya "rendang", "bakso", "ramen", atau nama bahan seperti "telur".</p>
+    </div>`;
+    return;
+  }
+  box.innerHTML = `<p class="result-count"><b>${list.length}</b> resep ditemukan untuk "${esc(q)}"</p><div class="grid">${list.map(r => cardHTML(r)).join('')}</div>`;
+  hydrateImages(box);
+}
+
+function renderFavorites(){
+  const list = APP_RECIPES.filter(r => favs.has(r.id));
+  $('#main').innerHTML = `
+  <div class="view">
+    <div class="section-head" style="margin-top:0"><h2>Resep Favorit</h2><span class="section-sub">${list.length} tersimpan</span></div>
+    ${list.length
+      ? `<div class="grid">${list.map(r => cardHTML(r)).join('')}</div>`
+      : `<div class="empty">
+          <div class="empty-ico">${ICO.heartBig}</div>
+          <h3>Belum ada favorit</h3>
+          <p>Simpan resep yang kamu suka dengan mengetuk ikon hati — semua tersimpan di perangkat ini, tanpa login.</p>
+          <button class="btn pressable" data-nav="home">${ICO.spark}Jelajahi Resep</button>
+        </div>`}
+  </div>`;
+  hydrateImages($('#main'));
+}
+
+function renderProfile(){
+  const cats = new Set(APP_RECIPES.map(r => r.category)).size;
+  $('#main').innerHTML = `
+  <div class="view">
+    <div class="section-head" style="margin-top:0"><h2>Profil &amp; Tentang</h2></div>
+    <div class="stat-grid">
+      <div class="stat-box glass"><div class="sb-ico">${ICO.heartBig}</div><b>${favs.size}</b><span>Total Favorit</span></div>
+      <div class="stat-box glass"><div class="sb-ico">${ICO.book}</div><b>${APP_RECIPES.length}</b><span>Total Resep</span></div>
+      <div class="stat-box glass wide"><div><b style="font-size:20px">${cats}</b><span style="display:block">Kategori masakan — dari Padang sampai Napoli</span></div><div class="sb-ico">${ICO.pot}</div></div>
+    </div>
+    <div class="about-card glass">
+      <h3>${ICO.info}Tentang Bite</h3>
+      <p>Bite adalah panduan memasak bergaya <i>liquid glass</i> dengan <b>100 resep pilihan</b> — 62 hidangan khas Nusantara dan 38 favorit Asia, Italia, dan Barat. Semua data resep tersimpan lokal di perangkatmu: ringan, cepat, dan tanpa iklan. Setiap resep dilengkapi bahan, langkah, dan tutorial video YouTube yang terverifikasi.</p>
+      <div class="about-row"><span>Versi aplikasi</span><b>1.0.0</b></div>
+      <div class="about-row"><span>Sumber data</span><b>Lokal (data.js)</b></div>
+      <div class="about-row"><span>Video tutorial</span><b>YouTube — 100 terverifikasi</b></div>
+      <div class="about-row"><span>Akun &amp; login</span><b>Tidak diperlukan</b></div>
+      <div class="about-actions">
+        <button class="btn-ghost pressable block btn-danger" id="clear-favs" style="margin-bottom:10px">${ICO.trash}Hapus Semua Favorit</button>
+        <button class="btn-ghost pressable block" id="clear-history">${ICO.history}Bersihkan Riwayat Pencarian</button>
+      </div>
+    </div>
+    <p class="profile-foot">Dibuat dengan <b>&hearts;</b> untuk pecinta masak — data 100% offline, video via YouTube.</p>
+  </div>`;
+  $('#clear-favs').onclick = async () => {
+    if (!favs.size) { toast('Belum ada favorit untuk dihapus'); return; }
+    if (await confirmDialog('Hapus semua favorit?', `${favs.size} resep favorit akan dihapus dari perangkat ini.`, 'Ya, hapus semua')) {
+      favs.clear(); saveFavs(); renderProfile(); toast('Semua favorit dihapus');
+    }
+  };
+  $('#clear-history').onclick = async () => {
+    if (!recents.length) { toast('Riwayat pencarian sudah kosong'); return; }
+    if (await confirmDialog('Bersihkan riwayat?', 'Semua kata kunci pencarian terakhir akan dihapus.', 'Ya, bersihkan')) {
+      recents = []; saveRecents(); renderProfile(); toast('Riwayat pencarian dibersihkan');
+    }
+  };
+}
+
+/* ================= DETAIL SHEET ================= */
+let sheetOpen = false;
+function openSheet(id){
+  const r = BY_ID[id]; if (!r) return;
+  const fav = favs.has(r.id);
+  $('#sheet-scroll').innerHTML = `
+  <div class="sheet-hero">
+    <img ${imgAttrs(r, true)}>
+    <div class="img-shimmer skel"></div>
+    <div class="scrim"></div>
+    <div class="sheet-fabs">
+      <button class="fab glass pressable${fav ? ' on' : ''}" data-fav="${r.id}" aria-label="Favorit">${ICO.heart}</button>
+      <button class="fab glass pressable" id="sheet-close" aria-label="Tutup">${ICO.close}</button>
+    </div>
+  </div>
+  <div class="sheet-head">
+    <span class="sheet-cat">${esc(r.category)} &middot; ${esc(r.area)}</span>
+    <h2>${esc(r.title)}</h2>
+    <p class="sheet-desc">${esc(r.description)}</p>
+    <div class="meta-row">
+      <div class="meta-box">${ICO.clock}<b>${esc(r.prepTime)}</b><span>Persiapan</span></div>
+      <div class="meta-box">${ICO.fire}<b>${esc(r.cookTime)}</b><span>Memasak</span></div>
+      <div class="meta-box">${ICO.pot}<b>${r.servings}</b><span>Porsi</span></div>
+    </div>
+  </div>
+  <div class="sheet-section">
+    <div class="video-card" id="video-card" role="button" tabindex="0" aria-label="Putar tutorial">
+      <img src="${thumb(r.youtubeId, true)}" alt="Thumbnail tutorial" loading="lazy">
+      <div class="video-play"><span class="vp">${ICO.play}</span></div>
+    </div>
+  </div>
+  <div class="sheet-section">
+    <h3>${ICO.list}Bahan-bahan</h3>
+    <div class="ing-list">${r.ingredients.map(i => `
+      <div class="ing-item"><span class="ing-check">${ICO.check}</span><span>${esc(i)}</span></div>`).join('')}
+    </div>
+    <p class="ing-progress" id="ing-progress">0 dari ${r.ingredients.length} bahan siap</p>
+  </div>
+  <div class="sheet-section">
+    <h3>${ICO.steps}Cara Membuat</h3>
+    <div class="steps">${r.instructions.map(s => `<div class="step"><span class="step-num"></span><p>${esc(s)}</p></div>`).join('')}</div>
+  </div>
+  <div class="sheet-section">
+    <div class="source-line">${ICO.yt}<span>Sumber resep &amp; video:</span><a href="${esc(r.source_url)}" target="_blank" rel="noopener noreferrer">${esc(r.source)}</a></div>
+  </div>
+  <div class="sheet-actions">
+    <a class="btn pressable" href="${esc(r.source_url)}" target="_blank" rel="noopener noreferrer">${ICO.yt}Tonton Tutorial di YouTube</a>
+  </div>`;
+  const root = $('#sheet-root');
+  root.classList.add('open');
+  requestAnimationFrame(() => { root.classList.add('show'); $('#sheet-scroll').scrollTop = 0; });
+  document.body.style.overflow = 'hidden';
+  sheetOpen = true;
+  document.title = `${r.title} — Bite`;
+  $('#sheet-close').onclick = closeSheet;
+  $('#sheet-backdrop').onclick = closeSheet;
+  $('#sheet-scroll').querySelector('.sheet-hero img').addEventListener('load', e => {
+    const sh = $('#sheet-scroll .sheet-hero .img-shimmer'); if (sh) sh.style.opacity = '0';
+  }, { once:true });
+  $('#sheet-scroll').querySelector('.sheet-hero img').addEventListener('error', e => {
+    e.target.src = FALLBACK_IMG;
+    const sh = $('#sheet-scroll .sheet-hero .img-shimmer'); if (sh) sh.style.opacity = '0';
+  }, { once:true });
+  // checklist
+  $$('#sheet-scroll .ing-item').forEach(item => item.addEventListener('click', () => {
+    item.classList.toggle('done');
+    const done = $$('#sheet-scroll .ing-item.done').length;
+    $('#ing-progress').textContent = `${done} dari ${r.ingredients.length} bahan siap`;
+  }));
+  // lazy YouTube embed
+  const vc = $('#video-card');
+  const play = () => { vc.innerHTML = `<iframe src="https://www.youtube.com/embed/${r.youtubeId}?autoplay=1&rel=0" title="Tutorial ${esc(r.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`; };
+  vc.addEventListener('click', play, { once:true });
+  vc.addEventListener('keydown', e => { if (e.key === 'Enter') play(); }, { once:true });
+}
+function closeSheet(){
+  if (!sheetOpen) return;
+  const root = $('#sheet-root');
+  root.classList.remove('show');
+  sheetOpen = false;
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    root.classList.remove('open');
+    $('#sheet-scroll').innerHTML = '';
+  }, 320);
+  if (location.hash.startsWith('#/recipe/')) location.hash = state.prevRoute;
+}
+
+/* ================= ROUTER ================= */
+function setNav(view){
+  $$('#nav .nav-item').forEach(b => b.classList.toggle('active', b.dataset.nav === view));
+  const titles = { home:'Bite', search:'Cari Resep', favorites:'Favorit', profile:'Profil & Tentang' };
+  $('#tb-title').textContent = titles[view] || 'Bite';
+  $('#tb-sub').textContent = view === 'home' ? greeting() + ', selamat memasak!' : '100 resep siap dimasak';
+}
+function renderRoute(){
+  const h = location.hash || '#/home';
+  let view = 'home', detailId = null;
+  if (h.startsWith('#/search')) view = 'search';
+  else if (h.startsWith('#/favorites')) view = 'favorites';
+  else if (h.startsWith('#/profile')) view = 'profile';
+  else if (h.startsWith('#/recipe/')) { view = state.view === 'home' ? state.view : state.view; detailId = h.split('/')[2]; }
+  if (detailId) {
+    if (!sheetOpen) { if (APP_RECIPES.some(r => r.id === detailId)) { openSheet(detailId); } else { location.hash = '#/home'; } }
+    return;
+  }
+  if (sheetOpen) { sheetOpen = false; document.body.style.overflow = ''; const root = $('#sheet-root'); root.classList.remove('show'); setTimeout(() => root.classList.remove('open'), 300); }
+  const changed = view !== state.view;
+  state.prevRoute = '#/' + view;
+  if (changed || !$('#main').firstChild) {
+    state.view = view;
+    setNav(view);
+    if (view === 'home') renderHome();
+    else if (view === 'search') renderSearch();
+    else if (view === 'favorites') renderFavorites();
+    else renderProfile();
+    window.scrollTo({ top:0, behavior:'instant' in window ? 'instant' : 'auto' });
+    document.title = 'Bite — ' + ({ home:'Mau menu apa hari ini?', search:'Cari resep', favorites:'Favorit', profile:'Profil & Tentang' })[view];
+  }
+}
+window.addEventListener('hashchange', renderRoute);
+
+/* ================= GLOBAL DELEGATION ================= */
+document.addEventListener('click', e => {
+  const favBtn = e.target.closest('[data-fav]');
+  if (favBtn) { e.stopPropagation(); toggleFav(favBtn.dataset.fav, favBtn); return; }
+  const open = e.target.closest('[data-open]');
+  if (open) {
+    if (state.view === 'search' && state.query.trim()) commitRecent(state.query);
+    location.hash = '#/recipe/' + open.dataset.open;
+    return;
+  }
+  const pill = e.target.closest('[data-cat]');
+  if (pill) { state.cat = pill.dataset.cat; renderHome(); return; }
+  const nav = e.target.closest('[data-nav]');
+  if (nav) {
+    const target = '#/' + nav.dataset.nav;
+    if (location.hash === target) { renderRoute(); } else { location.hash = target; }
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (sheetOpen) closeSheet(); else if ($('#confirm').classList.contains('open')) closeConfirm(false); }
+  const card = e.target.closest && e.target.closest('[data-open]');
+  if (e.key === 'Enter' && card) location.hash = '#/recipe/' + card.dataset.open;
+});
+
+/* ================= TOPBAR / NAV ================= */
+$$('.tb-btn').forEach(b => b.addEventListener('click', () => { location.hash = '#/search'; }));
+
+/* ================= SPLASH ================= */
+(function initSplash(){
+  const splash = $('#splash');
+  const topbar = $('#topbar');
+  const seen = sessionStorage.getItem(LS_SPLASH);
+  if (seen) { splash.remove(); topbar.hidden = false; return; }
+  topbar.hidden = true;
+  const dismiss = () => {
+    if (!document.body.contains(splash)) return;
+    splash.classList.add('hide');
+    sessionStorage.setItem(LS_SPLASH, '1');
+    topbar.hidden = false;
+    setTimeout(() => splash.remove(), 520);
+  };
+  splash.addEventListener('click', e => { if (e.target === splash || e.target.closest('.splash-inner') && !e.target.closest('.splash-search')) dismiss(); });
+  $('#splash-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const q = $('#splash-input').value.trim();
+    if (q) { commitRecent(q); state.query = q; location.hash = '#/search'; }
+    dismiss();
+  });
+  setTimeout(dismiss, 3000);
+})();
+
+/* ================= BOOT ================= */
+renderRoute();
+</script>
+</body>
+</html>
